@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CIT Hotel — Rate Comparison Dashboard</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#eef2f7;color:#1e293b;min-height:100vh}
+
+.page{max-width:1160px;margin:0 auto;padding:28px 20px}
+
+/* ── Header ── */
+.header{
+  background:linear-gradient(135deg,#0c1e45 0%,#173872 60%,#1a4a8a 100%);
+  border-radius:16px;padding:24px 32px;margin-bottom:22px;
+  display:flex;justify-content:space-between;align-items:center;color:#fff;
+  box-shadow:0 4px 20px rgba(12,30,69,.3);gap:20px;
+}
+.header-logo svg{display:block}
+.header-center{flex:1}
+.header-center h1{font-size:20px;font-weight:700;letter-spacing:-.3px;white-space:nowrap}
+.header-center p{font-size:12px;opacity:.6;margin-top:5px}
+.header-pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;align-items:flex-start}
+.pill{
+  background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);
+  border-radius:24px;padding:5px 14px;font-size:12px;color:rgba(255,255,255,.88);
+  white-space:nowrap;
+}
+
+/* ── Stats ── */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.stat{
+  background:#fff;border-radius:12px;padding:18px 20px;
+  box-shadow:0 1px 4px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  border-top:3px solid transparent;
+}
+.stat.blue{border-top-color:#3b82f6}
+.stat.green{border-top-color:#10b981}
+.stat.teal{border-top-color:#0ea5e9}
+.stat.violet{border-top-color:#8b5cf6}
+.stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#94a3b8;margin-bottom:8px}
+.stat-val{font-size:30px;font-weight:800;line-height:1;letter-spacing:-.5px}
+.stat-val.blue{color:#3b82f6}
+.stat-val.green{color:#10b981}
+.stat-val.teal{color:#0ea5e9}
+.stat-val.violet{color:#8b5cf6}
+.stat-sub{font-size:11px;color:#cbd5e1;margin-top:5px}
+
+/* ── Controls ── */
+.controls{
+  background:#fff;border-radius:12px;padding:14px 18px;margin-bottom:18px;
+  display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.06);
+}
+.controls select{
+  font-size:13px;padding:8px 12px;border-radius:8px;border:1px solid #e2e8f0;
+  background:#f8fafc;color:#1e293b;cursor:pointer;outline:none;
+  transition:border-color .15s,box-shadow .15s;
+}
+.controls select:hover{border-color:#94a3b8}
+.controls select:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.1)}
+.view-toggle{display:flex;gap:3px;margin-left:auto;background:#f1f5f9;border-radius:8px;padding:3px}
+.view-btn{
+  padding:6px 16px;font-size:12px;font-weight:600;border:none;border-radius:6px;
+  cursor:pointer;background:transparent;color:#64748b;transition:all .15s;
+}
+.view-btn.active{background:#fff;color:#1e293b;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+
+/* ── Panel wrapper ── */
+.panel{background:#fff;border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden}
+.panel-header{padding:18px 22px 0;font-size:14px;font-weight:700;color:#1e293b}
+
+/* ── Chart ── */
+.chart-wrap{padding:18px 22px}
+.legend{display:flex;gap:18px;margin-bottom:16px}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:12px;color:#64748b;font-weight:500}
+.leg-dot{width:10px;height:10px;border-radius:3px}
+.leg-dot.trip{background:#0ea5e9}
+.leg-dot.book{background:#8b5cf6}
+
+.city-rows{display:flex;flex-direction:column;gap:12px}
+.c-row{display:grid;grid-template-columns:120px 1fr 56px;align-items:center;gap:10px}
+.c-name{font-size:12px;font-weight:600;color:#475569;text-align:right;white-space:nowrap}
+.bars{display:flex;flex-direction:column;gap:4px}
+.bar-line{display:flex;align-items:center;gap:6px}
+.bar-track{flex:1;height:16px;background:#f1f5f9;border-radius:20px;overflow:hidden}
+.bar-fill{height:100%;border-radius:20px;transition:width .5s cubic-bezier(.4,0,.2,1);min-width:4px}
+.bar-fill.trip{background:linear-gradient(90deg,#0ea5e9,#38bdf8)}
+.bar-fill.book{background:linear-gradient(90deg,#8b5cf6,#a78bfa)}
+.bar-pct{font-size:10px;font-weight:700;color:#10b981;width:36px;text-align:left;white-space:nowrap}
+.c-avg{font-size:13px;font-weight:800;color:#10b981;text-align:right}
+
+/* ── Table ── */
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{
+  text-align:left;padding:12px 16px;border-bottom:1px solid #f1f5f9;
+  font-weight:700;color:#94a3b8;font-size:11px;text-transform:uppercase;letter-spacing:.6px;
+  background:#fafbff;
+}
+thead th:not(:first-child){text-align:right}
+tbody td{padding:12px 16px;border-bottom:1px solid #f8fafc;vertical-align:middle}
+tbody td:not(:first-child){text-align:right}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#fafbff}
+
+.h-meta{display:flex;align-items:center;gap:8px;margin-bottom:3px}
+.h-rank{font-size:11px;font-weight:700;color:#cbd5e1;min-width:18px}
+.h-city{font-size:11px;color:#94a3b8}
+.h-name{font-weight:700;font-size:14px;color:#1e293b;line-height:1.3;margin-bottom:3px}
+.h-stars{font-size:10px;color:#f59e0b;letter-spacing:-1px}
+
+.price-cit{color:#10b981;font-weight:800;font-size:14px}
+.price-comp{color:#94a3b8;font-size:13px}
+
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;white-space:nowrap;
+}
+.good{background:#dcfce7;color:#15803d}
+.warn{background:#fee2e2;color:#dc2626}
+.neu{background:#f1f5f9;color:#94a3b8}
+
+.hidden{display:none!important}
+
+/* ── Footer ── */
+.footer{text-align:center;margin-top:20px;font-size:11px;color:#cbd5e1}
+
+@media(max-width:700px){
+  .stats{grid-template-columns:repeat(1,1fr)}
+  .header{flex-direction:column;gap:14px;text-align:center}
+  .header-logo{display:flex;justify-content:center}
+  .header-pills{justify-content:center}
+  .c-row{grid-template-columns:80px 1fr 48px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <!-- CIT Logo -->
+    <div class="header-logo">
+      <svg width="148" height="78" viewBox="0 0 148 78" xmlns="http://www.w3.org/2000/svg">
+        <!-- Large serif C -->
+        <text x="-4" y="64" font-family="Georgia,'Times New Roman',serif" font-size="70" font-weight="900" fill="white">C</text>
+        <!-- Top crossbar: left segment -->
+        <rect x="50" y="16" width="18" height="7" rx="2" fill="white"/>
+        <!-- Top crossbar: hollow circle dot (the i's mark) -->
+        <circle cx="75" cy="19.5" r="5" fill="none" stroke="white" stroke-width="2.5"/>
+        <!-- Top crossbar: right segment -->
+        <rect x="83" y="16" width="26" height="7" rx="2" fill="white"/>
+        <!-- i/T stem -->
+        <rect x="72" y="25" width="7" height="28" rx="1" fill="white"/>
+        <!-- Bottom bar (foot of i) -->
+        <rect x="60" y="53" width="26" height="7" rx="2" fill="white"/>
+        <!-- Tagline -->
+        <text x="0" y="75" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif" font-size="7" font-weight="500" fill="rgba(255,255,255,0.55)" letter-spacing="0.5">Cambosolution Innovative Technology</text>
+      </svg>
+    </div>
+    <!-- Title -->
+    <div class="header-center">
+      <h1>Hotel Rate Comparison</h1>
+      <p>CIT rates vs Trip.com &amp; Booking.com &nbsp;·&nbsp; All prices in USD &nbsp;·&nbsp; 1 night, 1 room</p>
+    </div>
+    <!-- Pills -->
+    <div class="header-pills">
+      <span class="pill">16 cities</span>
+      <span class="pill">85 hotels</span>
+      <span class="pill">Asia &middot; Europe &middot; Middle East</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat blue">
+      <div class="stat-label">Hotels Shown</div>
+      <div class="stat-val blue" id="s-count">—</div>
+      <div class="stat-sub">filtered selection</div>
+    </div>
+    <div class="stat teal">
+      <div class="stat-label">Avg Saving vs Trip.com</div>
+      <div class="stat-val teal" id="s-trip">—</div>
+      <div class="stat-sub">CIT is cheaper</div>
+    </div>
+    <div class="stat violet">
+      <div class="stat-label">Avg Saving vs Booking</div>
+      <div class="stat-val violet" id="s-book">—</div>
+      <div class="stat-sub">CIT is cheaper</div>
+    </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <select id="cityFilter">
+      <option value="all">All cities</option>
+      <option value="KL">Kuala Lumpur 🇲🇾</option>
+      <option value="HCM">Ho Chi Minh 🇻🇳</option>
+      <option value="SG">Singapore 🇸🇬</option>
+      <option value="SEL">Seoul 🇰🇷</option>
+      <option value="TYO">Tokyo 🇯🇵</option>
+      <option value="DXB">Dubai 🇦🇪</option>
+      <option value="MNL">Manila 🇵🇭</option>
+      <option value="HKG">Hong Kong 🇭🇰</option>
+      <option value="TPE">Taipei 🇹🇼</option>
+      <option value="JKT">Jakarta 🇮🇩</option>
+      <option value="AMS">Amsterdam 🇳🇱</option>
+      <option value="LON">London 🇬🇧</option>
+      <option value="PAR">Paris 🇫🇷</option>
+      <option value="BCN">Barcelona 🇪🇸</option>
+      <option value="ROM">Rome 🇮🇹</option>
+      <option value="BER">Berlin 🇩🇪</option>
+    </select>
+    <select id="sortBy">
+      <option value="savings_trip">Best saving vs Trip.com</option>
+      <option value="savings_book">Best saving vs Booking.com</option>
+      <option value="price_asc">Price: low → high</option>
+      <option value="price_desc">Price: high → low</option>
+      <option value="name">Hotel name A–Z</option>
+    </select>
+    <div class="view-toggle">
+      <button class="view-btn active" id="btn-table" onclick="setView('table')">Table</button>
+      <button class="view-btn" id="btn-chart" onclick="setView('chart')">City Chart</button>
+    </div>
+  </div>
+
+  <!-- Chart View -->
+  <div id="view-chart" class="panel hidden">
+    <div class="panel-header">Average savings by city — CIT vs competitors</div>
+    <div class="chart-wrap">
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot trip"></div>vs Trip.com</div>
+        <div class="leg-item"><div class="leg-dot book"></div>vs Booking.com</div>
+      </div>
+      <div class="city-rows" id="cityChart"></div>
+    </div>
+  </div>
+
+  <!-- Table View -->
+  <div id="view-table" class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:36%">Hotel</th>
+          <th>CIT Rate</th>
+          <th>Trip.com</th>
+          <th>Booking</th>
+          <th>vs Trip</th>
+          <th>vs Booking</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">Data for illustrative purposes · CIT Hotel rate comparison dashboard</div>
+</div>
+
+<script>
+const HOTELS = [
+  {city:'KL',flag:'🇲🇾',hotel:'Four Seasons KL',stars:5,cit:326.3,trip:373.76,book:413},
+  {city:'KL',flag:'🇲🇾',hotel:'Sofitel KL Damansara',stars:5,cit:114.55,trip:130.78,book:130.07},
+  {city:'KL',flag:'🇲🇾',hotel:'Hilton KL',stars:5,cit:111.60,trip:132.67,book:132.86},
+  {city:'KL',flag:'🇲🇾',hotel:'Hyatt House KL Mont Kiara',stars:5,cit:86.81,trip:130.92,book:109.15},
+  {city:'KL',flag:'🇲🇾',hotel:'Hotel Stripes KL',stars:5,cit:89.53,trip:98.97,book:98.97},
+  {city:'KL',flag:'🇲🇾',hotel:'The Majestic Hotel KL',stars:5,cit:106.31,trip:121.20,book:121.32},
+  {city:'KL',flag:'🇲🇾',hotel:'Parkroyal Collection KL',stars:5,cit:107.55,trip:139.58,book:213.26},
+  {city:'KL',flag:'🇲🇾',hotel:'Grand Millennium KL',stars:5,cit:104.0,trip:133.0,book:127.0},
+  {city:'KL',flag:'🇲🇾',hotel:'JW Marriott KL',stars:5,cit:119.0,trip:141.0,book:139.0},
+  {city:'KL',flag:'🇲🇾',hotel:'The RuMa Hotel KL',stars:5,cit:159.0,trip:174.0,book:168.0},
+  {city:'KL',flag:'🇲🇾',hotel:'Hotel Stripes KL (Autograph)',stars:5,cit:81.0,trip:98.0,book:81.0},
+  {city:'KL',flag:'🇲🇾',hotel:'St. Regis KL',stars:5,cit:271.0,trip:347.0,book:311.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'The Reverie Saigon',stars:5,cit:216.0,trip:246.0,book:252.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'Mia Saigon Luxury Boutique',stars:5,cit:214.0,trip:242.0,book:232.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'Hilton Saigon',stars:5,cit:175.0,trip:215.0,book:216.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'An Lam Retreats Saigon',stars:5,cit:350.0,trip:348.0,book:428.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'Sofitel Saigon Plaza',stars:5,cit:147.0,trip:153.0,book:207.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'SILA Urban Living',stars:5,cit:80.8,trip:98.0,book:97.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'Sherwood Residence',stars:5,cit:96.0,trip:112.0,book:98.0},
+  {city:'HCM',flag:'🇻🇳',hotel:'The Myst Dong Khoi',stars:5,cit:137.54,trip:197.0,book:195.0},
+  {city:'SG',flag:'🇸🇬',hotel:'Studio M Hotel',stars:5,cit:113.24,trip:151.0,book:151.0},
+  {city:'SG',flag:'🇸🇬',hotel:'One Farre Hotel',stars:5,cit:179.34,trip:254.0,book:228.0},
+  {city:'SG',flag:'🇸🇬',hotel:'Pullman Singapore Orchard',stars:5,cit:214.0,trip:261.0,book:261.0},
+  {city:'SG',flag:'🇸🇬',hotel:'Oasia Resort Sentosa',stars:5,cit:150.36,trip:175.0,book:175.0},
+  {city:'SG',flag:'🇸🇬',hotel:'Grand Park City Hall',stars:5,cit:159.0,trip:200.0,book:195.0},
+  {city:'SEL',flag:'🇰🇷',hotel:'Mondrian Seoul Itaewon',stars:5,cit:195.21,trip:269.0,book:280.0},
+  {city:'SEL',flag:'🇰🇷',hotel:'Novotel Suites Seoul Yongsan',stars:5,cit:178.73,trip:232.0,book:210.0},
+  {city:'SEL',flag:'🇰🇷',hotel:'The Ambassador Seoul',stars:5,cit:200.0,trip:434.0,book:337.0},
+  {city:'SEL',flag:'🇰🇷',hotel:'Courtyard Marriott Seoul',stars:5,cit:248.0,trip:308.0,book:310.0},
+  {city:'SEL',flag:'🇰🇷',hotel:'The Westin Josun Seoul',stars:5,cit:369.0,trip:454.0,book:446.0},
+  {city:'TYO',flag:'🇯🇵',hotel:'Grand Prince Hotel Takanawa',stars:5,cit:147.0,trip:183.0,book:209.0},
+  {city:'TYO',flag:'🇯🇵',hotel:'Hilton Tokyo Odaiba',stars:5,cit:183.0,trip:315.0,book:316.0},
+  {city:'TYO',flag:'🇯🇵',hotel:'Mitsui Garden Ginza Premier',stars:5,cit:184.0,trip:223.0,book:287.0},
+  {city:'TYO',flag:'🇯🇵',hotel:'Mitsui Garden Nihonbashi',stars:5,cit:201.0,trip:227.0,book:287.0},
+  {city:'TYO',flag:'🇯🇵',hotel:'Keio Plaza Hotel Tokyo',stars:5,cit:217.0,trip:232.0,book:330.0},
+  {city:'DXB',flag:'🇦🇪',hotel:'InterContinental Dubai Business Bay',stars:5,cit:100.0,trip:184.0,book:184.0},
+  {city:'DXB',flag:'🇦🇪',hotel:'Shangri-La Dubai',stars:5,cit:103.0,trip:119.0,book:119.0},
+  {city:'DXB',flag:'🇦🇪',hotel:'The H Dubai',stars:5,cit:104.0,trip:119.0,book:162.0},
+  {city:'DXB',flag:'🇦🇪',hotel:'FIVE Palm Jumeirah',stars:5,cit:112.0,trip:146.0,book:172.0},
+  {city:'DXB',flag:'🇦🇪',hotel:'Grand Hyatt Residence Dubai',stars:5,cit:132.0,trip:249.0,book:289.0},
+  {city:'MNL',flag:'🇵🇭',hotel:'The Manila Hotel',stars:5,cit:107.0,trip:116.0,book:150.0},
+  {city:'MNL',flag:'🇵🇭',hotel:'Diamond Hotel Manila',stars:5,cit:87.0,trip:92.0,book:160.0},
+  {city:'HKG',flag:'🇭🇰',hotel:'JEN Hong Kong by Shangri-La',stars:4,cit:295.0,trip:336.0,book:360.0},
+  {city:'HKG',flag:'🇭🇰',hotel:'Harbour Grand Hong Kong',stars:5,cit:180.0,trip:210.0,book:232.0},
+  {city:'HKG',flag:'🇭🇰',hotel:'The Hari Hong Kong',stars:5,cit:193.0,trip:220.0,book:240.0},
+  {city:'HKG',flag:'🇭🇰',hotel:'Kerry Hotel HK by Shangri-La',stars:5,cit:276.63,trip:410.0,book:410.0},
+  {city:'HKG',flag:'🇭🇰',hotel:'Ramada HK Harbour View',stars:5,cit:79.73,trip:96.0,book:99.0},
+  {city:'TPE',flag:'🇹🇼',hotel:'The Riviera Hotel Taipei',stars:5,cit:121.16,trip:135.0,book:132.0},
+  {city:'TPE',flag:'🇹🇼',hotel:'Hotel Royal Nikko Taipei',stars:5,cit:154.43,trip:180.0,book:180.0},
+  {city:'TPE',flag:'🇹🇼',hotel:'The Okura Prestige Taipei',stars:5,cit:235.32,trip:241.0,book:271.0},
+  {city:'TPE',flag:'🇹🇼',hotel:'Hotel Resonance Taipei',stars:4,cit:174.38,trip:194.0,book:194.0},
+  {city:'TPE',flag:'🇹🇼',hotel:'Hotel Indigo Taipei North',stars:4,cit:117.18,trip:154.0,book:161.0},
+  {city:'JKT',flag:'🇮🇩',hotel:'Ritz-Carlton Jakarta Pacific Place',stars:5,cit:222.82,trip:257.0,book:256.0},
+  {city:'JKT',flag:'🇮🇩',hotel:'Best Western Premier The Hive',stars:5,cit:39.94,trip:40.0,book:43.0},
+  {city:'JKT',flag:'🇮🇩',hotel:'Manhattan Hotel Jakarta',stars:5,cit:56.0,trip:57.0,book:91.0},
+  {city:'JKT',flag:'🇮🇩',hotel:'Hotel Gran Mahakam',stars:5,cit:81.26,trip:107.0,book:100.0},
+  {city:'JKT',flag:'🇮🇩',hotel:'Swissotel Jakarta Mega Kuningan',stars:5,cit:91.05,trip:114.0,book:114.0},
+  {city:'AMS',flag:'🇳🇱',hotel:'Leonardo Hotel Amsterdam',stars:5,cit:120.0,trip:206.0,book:206.0},
+  {city:'AMS',flag:'🇳🇱',hotel:'Crowne Plaza Amsterdam South',stars:5,cit:187.0,trip:296.0,book:281.0},
+  {city:'AMS',flag:'🇳🇱',hotel:'Grand Hotel Amrath Amsterdam',stars:5,cit:369.0,trip:520.0,book:444.0},
+  {city:'AMS',flag:'🇳🇱',hotel:'Bilderberg Garden Hotel',stars:5,cit:175.0,trip:279.0,book:263.0},
+  {city:'AMS',flag:'🇳🇱',hotel:'Hotel Arena Amsterdam',stars:5,cit:211.0,trip:386.0,book:371.0},
+  {city:'LON',flag:'🇬🇧',hotel:'Rafayel Hotel & Spa London',stars:5,cit:209.0,trip:287.0,book:274.0},
+  {city:'LON',flag:'🇬🇧',hotel:'InterContinental London The O2',stars:5,cit:231.0,trip:350.0,book:351.0},
+  {city:'LON',flag:'🇬🇧',hotel:'Limehouse Library Hotel',stars:5,cit:298.0,trip:488.0,book:659.0},
+  {city:'LON',flag:'🇬🇧',hotel:'Radisson Blu Hotel London',stars:5,cit:383.0,trip:439.0,book:439.0},
+  {city:'LON',flag:'🇬🇧',hotel:'Hyatt Regency London Blackfriars',stars:5,cit:441.0,trip:476.0,book:476.0},
+  {city:'PAR',flag:'🇫🇷',hotel:'The People Paris Marais',stars:5,cit:285.0,trip:338.0,book:357.0},
+  {city:'PAR',flag:'🇫🇷',hotel:'Boutet Bastille Hotel Paris',stars:5,cit:467.0,trip:632.0,book:632.0},
+  {city:'PAR',flag:'🇫🇷',hotel:'Maison Albar Le Champs-Elysées',stars:5,cit:426.0,trip:494.0,book:495.0},
+  {city:'PAR',flag:'🇫🇷',hotel:'Hotel Peyris Opera Paris',stars:4,cit:168.3,trip:402.0,book:445.0},
+  {city:'PAR',flag:'🇫🇷',hotel:'Hotel Eden Paris Porte de Versailles',stars:4,cit:199.11,trip:348.0,book:389.0},
+  {city:'BCN',flag:'🇪🇸',hotel:'Hotel SB Diagonal Zero',stars:5,cit:106.0,trip:200.0,book:202.0},
+  {city:'BCN',flag:'🇪🇸',hotel:'Catalonia Square Barcelona',stars:5,cit:220.0,trip:338.0,book:337.0},
+  {city:'BCN',flag:'🇪🇸',hotel:'Occidental Diagonal 414',stars:5,cit:205.0,trip:295.0,book:314.0},
+  {city:'BCN',flag:'🇪🇸',hotel:'Negresco Princess Barcelona',stars:5,cit:193.55,trip:348.0,book:348.0},
+  {city:'BCN',flag:'🇪🇸',hotel:'Eurostars Barcelona Central',stars:5,cit:268.39,trip:342.0,book:368.0},
+  {city:'ROM',flag:'🇮🇹',hotel:'Sina Bernini Bristol Rome',stars:5,cit:646.0,trip:942.0,book:804.0},
+  {city:'ROM',flag:'🇮🇹',hotel:'The Westin Excelsior Rome',stars:5,cit:709.0,trip:2200.0,book:987.0},
+  {city:'ROM',flag:'🇮🇹',hotel:'Hotel Splendide Royal Rome',stars:5,cit:700.0,trip:1600.0,book:1130.0},
+  {city:'ROM',flag:'🇮🇹',hotel:'Baglioni Hotel Regina Rome',stars:5,cit:834.0,trip:994.0,book:960.0},
+  {city:'ROM',flag:'🇮🇹',hotel:'Palazzo Montemartini Rome',stars:5,cit:386.0,trip:646.0,book:514.0},
+  {city:'BER',flag:'🇩🇪',hotel:'Vienna House Andels Berlin',stars:5,cit:109.18,trip:186.0,book:186.0},
+  {city:'BER',flag:'🇩🇪',hotel:'Eurostars Berlin',stars:5,cit:141.57,trip:277.0,book:291.0},
+  {city:'BER',flag:'🇩🇪',hotel:'Radisson Collection Berlin',stars:5,cit:204.0,trip:280.0,book:280.0},
+  {city:'BER',flag:'🇩🇪',hotel:'Roomers Berlin Steinplatz',stars:5,cit:237.73,trip:287.0,book:316.0},
+  {city:'BER',flag:'🇩🇪',hotel:'Berlin Marriott Hotel',stars:5,cit:242.0,trip:328.0,book:371.0},
+];
+
+const CITY_NAMES = {
+  KL:'Kuala Lumpur',HCM:'Ho Chi Minh',SG:'Singapore',SEL:'Seoul',TYO:'Tokyo',
+  DXB:'Dubai',MNL:'Manila',HKG:'Hong Kong',TPE:'Taipei',JKT:'Jakarta',
+  AMS:'Amsterdam',LON:'London',PAR:'Paris',BCN:'Barcelona',ROM:'Rome',BER:'Berlin'
+};
+
+let currentView = 'table';
+
+function pct(cit, comp) {
+  if (!comp || comp <= 0) return null;
+  return ((comp - cit) / comp) * 100;
+}
+
+function badge(val) {
+  if (val === null) return '<span class="badge neu">—</span>';
+  const cls = val >= 0 ? 'good' : 'warn';
+  const prefix = val >= 0 ? '−' : '+';
+  return `<span class="badge ${cls}">${prefix}${Math.abs(val).toFixed(0)}%</span>`;
+}
+
+function avg(arr) {
+  const valid = arr.filter(v => v !== null);
+  if (!valid.length) return null;
+  return valid.reduce((s,v) => s+v, 0) / valid.length;
+}
+
+function getFiltered() {
+  const city = document.getElementById('cityFilter').value;
+  const sort = document.getElementById('sortBy').value;
+  let data = (city === 'all' ? HOTELS : HOTELS.filter(h => h.city === city)).map(h => ({
+    ...h,
+    stTrip: pct(h.cit, h.trip),
+    stBook: pct(h.cit, h.book)
+  }));
+  if (sort === 'savings_trip') data.sort((a,b) => (b.stTrip||0)-(a.stTrip||0));
+  else if (sort === 'savings_book') data.sort((a,b) => (b.stBook||0)-(a.stBook||0));
+  else if (sort === 'price_asc') data.sort((a,b) => a.cit-b.cit);
+  else if (sort === 'price_desc') data.sort((a,b) => b.cit-a.cit);
+  else data.sort((a,b) => a.hotel.localeCompare(b.hotel));
+  return data;
+}
+
+function renderStats(data) {
+  const avgTrip = avg(data.map(h => h.stTrip));
+  const avgBook = avg(data.map(h => h.stBook));
+  document.getElementById('s-count').textContent = data.length;
+  document.getElementById('s-trip').textContent = avgTrip !== null ? `−${avgTrip.toFixed(0)}%` : '—';
+  document.getElementById('s-book').textContent = avgBook !== null ? `−${avgBook.toFixed(0)}%` : '—';
+}
+
+function renderTable(data) {
+  document.getElementById('tableBody').innerHTML = data.map((h, i) => `
+    <tr>
+      <td>
+        <div class="h-meta">
+          <span class="h-rank">#${i+1}</span>
+          <span class="h-city">${h.flag} ${CITY_NAMES[h.city]||h.city}</span>
+        </div>
+        <div class="h-name">${h.hotel}</div>
+        <div class="h-stars">${'★'.repeat(h.stars)}${'☆'.repeat(5-h.stars)}</div>
+      </td>
+      <td><span class="price-cit">$${h.cit.toFixed(0)}</span></td>
+      <td><span class="price-comp">$${h.trip.toFixed(0)}</span></td>
+      <td><span class="price-comp">$${h.book.toFixed(0)}</span></td>
+      <td>${badge(h.stTrip)}</td>
+      <td>${badge(h.stBook)}</td>
+    </tr>
+  `).join('');
+}
+
+function renderChart(data) {
+  // Group by city, compute averages
+  const cityMap = {};
+  data.forEach(h => {
+    if (!cityMap[h.city]) cityMap[h.city] = {flag:h.flag,name:CITY_NAMES[h.city]||h.city,trips:[],books:[]};
+    if (h.stTrip !== null) cityMap[h.city].trips.push(h.stTrip);
+    if (h.stBook !== null) cityMap[h.city].books.push(h.stBook);
+  });
+
+  const rows = Object.entries(cityMap).map(([code, d]) => ({
+    code, flag:d.flag, name:d.name,
+    trip: avg(d.trips), book: avg(d.books)
+  })).filter(r => r.trip !== null || r.book !== null);
+
+  rows.sort((a,b) => ((b.trip||0)+(b.book||0)) - ((a.trip||0)+(a.book||0)));
+
+  const maxPct = Math.max(...rows.flatMap(r => [r.trip||0, r.book||0]), 1);
+
+  document.getElementById('cityChart').innerHTML = rows.map(r => {
+    const tripW = r.trip !== null ? Math.max(4, (r.trip/maxPct)*100) : 0;
+    const bookW = r.book !== null ? Math.max(4, (r.book/maxPct)*100) : 0;
+    const avgVal = avg([r.trip, r.book]);
+    return `
+      <div class="c-row">
+        <div class="c-name">${r.flag} ${r.name}</div>
+        <div class="bars">
+          <div class="bar-line">
+            <div class="bar-track"><div class="bar-fill trip" style="width:${tripW}%"></div></div>
+            <div class="bar-pct">${r.trip!==null?`−${r.trip.toFixed(0)}%`:''}</div>
+          </div>
+          <div class="bar-line">
+            <div class="bar-track"><div class="bar-fill book" style="width:${bookW}%"></div></div>
+            <div class="bar-pct">${r.book!==null?`−${r.book.toFixed(0)}%`:''}</div>
+          </div>
+        </div>
+        <div class="c-avg">${avgVal!==null?`−${avgVal.toFixed(0)}%`:'—'}</div>
+      </div>`;
+  }).join('');
+}
+
+function render() {
+  const data = getFiltered();
+  renderStats(data);
+  if (currentView === 'table') renderTable(data);
+  else renderChart(data);
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('view-table').classList.toggle('hidden', v !== 'table');
+  document.getElementById('view-chart').classList.toggle('hidden', v !== 'chart');
+  document.getElementById('btn-table').classList.toggle('active', v === 'table');
+  document.getElementById('btn-chart').classList.toggle('active', v === 'chart');
+  render();
+}
+
+document.getElementById('cityFilter').addEventListener('change', render);
+document.getElementById('sortBy').addEventListener('change', render);
+render();
+</script>
+</body>
+</html>
