@@ -7,20 +7,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
       rel="stylesheet"
     />
+    <link rel="icon" href="https://www.cithotel.travel/cit-logo.jpg" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   </head>
   <body>
     <nav>
-      <div class="nav-logo"><img src="https://www.cithotel.travel/cit-logo.jpg" alt="CIT Logo"></div>
+      <div class="nav-logo">
+        <img src="https://www.cithotel.travel/cit-logo.jpg" alt="CIT Logo" />
+      </div>
       <div class="nav-tagline">Best Rate Guarantee</div>
     </nav>
 
     <div class="hero">
-      <div class="hero-eyebrow">Price Comparison · 2026</div>
       <h1>Always <em>pay less.</em></h1>
       <p class="hero-sub">
         CIT Hotel consistently beats Trip.com and Booking.com across every city,
@@ -35,6 +37,10 @@
         <div class="section-header">
           <div class="section-title">Average price by city</div>
           <div class="section-note">Per night · USD</div>
+        </div>
+        <div class="chart-toggle" id="cityChartToggle">
+          <button class="toggle-btn active" data-mode="price">Price</button>
+          <button class="toggle-btn" data-mode="savings">Savings</button>
         </div>
         <div class="legend">
           <div class="legend-item">
@@ -72,6 +78,72 @@
         </div>
       </section>
 
+      <!-- DISTRIBUTION CHART -->
+      <section style="padding-top: 0">
+        <div class="section-header">
+          <div class="section-title">Savings distribution</div>
+          <div class="section-note">How often CIT beats competitors</div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-wrap">
+            <canvas id="distributionChart" height="220"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- STARS CHART -->
+      <section style="padding-top: 0">
+        <div class="section-header">
+          <div class="section-title">Savings by star rating</div>
+          <div class="section-note">Average % cheaper by stars</div>
+        </div>
+        <div class="chart-card">
+          <div class="chart-wrap">
+            <canvas id="starsChart" height="220"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAY TYPE CHART -->
+      <section style="padding-top: 0">
+        <div class="section-header">
+          <div class="section-title">Weekday vs weekend</div>
+          <div class="section-note">Compare prices and savings</div>
+        </div>
+        <div class="chart-toggle" id="stayChartToggle">
+          <button class="toggle-btn active" data-mode="price">Price</button>
+          <button class="toggle-btn" data-mode="savings">Savings</button>
+        </div>
+        <div class="chart-card">
+          <div class="chart-wrap">
+            <canvas id="stayChart" height="220"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- CITY SUMMARY TABLE -->
+      <section style="padding-top: 0">
+        <div class="section-header">
+          <div class="section-title">City summary</div>
+          <div class="section-note">Average prices and savings</div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>City</th>
+                <th>CIT Avg</th>
+                <th>Trip Avg</th>
+                <th>Booking Avg</th>
+                <th>Save vs Trip</th>
+                <th>Save vs Booking</th>
+              </tr>
+            </thead>
+            <tbody id="citySummaryBody"></tbody>
+          </table>
+        </div>
+      </section>
+
       <!-- TABLE -->
       <section style="padding-top: 0">
         <div class="section-header">
@@ -80,6 +152,13 @@
         </div>
 
         <div class="filter-bar">
+          <div class="filter-group">
+            <label>Country</label>
+            <select id="filterCountry">
+              <option value="">All countries</option>
+            </select>
+          </div>
+          <div class="filter-divider"></div>
           <div class="filter-group">
             <label>City</label>
             <select id="filterCity">
@@ -102,6 +181,26 @@
               <option value="">All</option>
               <option value="Weekday">Weekday</option>
               <option value="Weekend">Weekend</option>
+            </select>
+          </div>
+          <div class="filter-divider"></div>
+          <div class="filter-group">
+            <label>Room Type</label>
+            <select id="filterRoomType">
+              <option value="">All</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Free Cancellation</label>
+            <select id="filterCancellation">
+              <option value="">All</option>
+            </select>
+          </div>
+          <div class="filter-divider"></div>
+          <div class="filter-group">
+            <label>Breakfast</label>
+            <select id="filterBreakfast">
+              <option value="">All</option>
             </select>
           </div>
         </div>
