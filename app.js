@@ -27,6 +27,7 @@ async function init() {
       hotel: r["Hotel"],
       stars: +r["Stars"],
       roomType: cleanField(r["Room Type"]),
+      bedType: cleanField(r["Bed Type"]),
       freeCancellation: cleanField(r["Free Cancellation"]),
       breakfastIncluded: cleanField(r["Breakfast Included"]),
       checkIn: r["Check-in Date"],
@@ -488,7 +489,7 @@ async function init() {
   const filterCity = document.getElementById("filterCity");
   const filterStars = document.getElementById("filterStars");
   const filterStay = document.getElementById("filterStay");
-  const filterRoomType = document.getElementById("filterRoomType");
+  const filterBedType = document.getElementById("filterBedType");
   const filterCancellation = document.getElementById("filterCancellation");
   const filterBreakfast = document.getElementById("filterBreakfast");
   const cityToggle = document.getElementById("cityChartToggle");
@@ -519,7 +520,7 @@ async function init() {
       const o = document.createElement("option");
       o.value = t;
       o.textContent = t;
-      filterRoomType.appendChild(o);
+      filterBedType.appendChild(o);
     },
   );
 
@@ -573,11 +574,11 @@ async function init() {
     if (filterStars.value)
       rows = rows.filter((d) => d.stars === +filterStars.value);
     if (filterStay.value) rows = rows.filter((d) => d.stay === filterStay.value);
-    if (filterRoomType.value)
+    if (filterBedType.value)
       rows = rows.filter((d) =>
-        d.roomType
+        d.bedType
           .toLowerCase()
-          .includes(filterRoomType.value.toLowerCase()),
+          .includes(filterBedType.value.toLowerCase()),
       );
     if (filterCancellation.value)
       rows = rows.filter((d) => d.freeCancellation === filterCancellation.value);
@@ -681,7 +682,7 @@ async function init() {
     filterCity,
     filterStars,
     filterStay,
-    filterRoomType,
+    filterBedType,
     filterCancellation,
     filterBreakfast,
   ].forEach((el) => {
