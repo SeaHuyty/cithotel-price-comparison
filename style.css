@@ -1,3 +1,9 @@
+.table-wrap th:last-child,
+.table-wrap td:last-child {
+  width: 1%;
+  padding-left: 8px;
+  padding-right: 8px;
+}
 :root {
   --primary: #1c315a;
   --accent: #e3a916;
@@ -331,7 +337,58 @@ td {
 td.hotel-name {
   color: var(--primary);
   font-weight: 500;
-  max-width: 220px;
+  max-width: 260px;
+  white-space: normal;
+  word-break: break-word;
+}
+.group-toggle-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+.group-toggle {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  padding: 4px 8px;
+  border: 1px solid var(--gray-100);
+  border-radius: 999px;
+  background: var(--gray-50);
+  color: var(--primary);
+  cursor: pointer;
+  font-weight: 600;
+}
+.group-toggle:hover {
+  border-color: var(--primary);
+}
+.group-toggle-muted {
+  font-size: 11px;
+  color: var(--gray-500);
+}
+.group-details {
+  background: #fcfbf8;
+}
+.variant-wrap {
+  padding: 10px 6px 14px;
+}
+.variant-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.variant-table thead {
+  background: transparent;
+}
+.variant-table thead th {
+  color: var(--gray-500);
+  font-weight: 600;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.variant-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.variant-table tbody tr:last-child td {
+  border-bottom: none;
 }
 .city-badge {
   display: inline-block;

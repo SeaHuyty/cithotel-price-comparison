@@ -501,6 +501,44 @@ async function init() {
     );
   }
 
+  function buildCityMap(rows) {
+    const map = new Map();
+    rows.forEach((row) => {
+      if (!row.country || !row.city) return;
+      if (!map.has(row.country)) map.set(row.country, new Set());
+      map.get(row.country).add(row.city);
+    });
+    return map;
+  }
+
+  const cityMap = buildCityMap(DATA);
+
+  function populateCityOptions(country, selectedCity = "") {
+    const allCities = uniqueSorted(DATA.map((d) => d.city));
+    const cities = country
+      ? uniqueSorted([...(cityMap.get(country) || [])])
+      : allCities;
+
+    filterCity.innerHTML = "";
+    const allOption = document.createElement("option");
+    allOption.value = "";
+    allOption.textContent = "All cities";
+    filterCity.appendChild(allOption);
+
+    cities.forEach((c) => {
+      const o = document.createElement("option");
+      o.value = c;
+      o.textContent = c;
+      filterCity.appendChild(o);
+    });
+
+    if (selectedCity && cities.includes(selectedCity)) {
+      filterCity.value = selectedCity;
+    } else {
+      filterCity.value = "";
+    }
+  }
+
   uniqueSorted(DATA.map((d) => d.country)).forEach((c) => {
     const o = document.createElement("option");
     o.value = c;
@@ -508,12 +546,7 @@ async function init() {
     filterCountry.appendChild(o);
   });
 
-  uniqueSorted(DATA.map((d) => d.city)).forEach((c) => {
-    const o = document.createElement("option");
-    o.value = c;
-    o.textContent = c;
-    filterCity.appendChild(o);
-  });
+  populateCityOptions("");
 
   ["2 Single Beds", "1 Double Bed", "1 Extra-Large Double Bed"].forEach(
     (t) => {
@@ -605,12 +638,62 @@ async function init() {
     return "savings-high";
   }
 
+  function groupByHotel(rows) {
+    const map = new Map();
+    rows.forEach((row) => {
+      const key = `${row.hotel}||${row.city}`;
+      if (!map.has(key)) {
+        map.set(key, { key, hotel: row.hotel, city: row.city, rows: [] });
+      }
+      map.get(key).rows.push(row);
+    });
+    return [...map.values()];
+  }
+
+  function pickGroupRow(group) {
+    if (currentSort === "price_desc") {
+      return group.rows.reduce((best, row) =>
+        row.cit > best.cit ? row : best,
+      );
+    }
+    if (currentSort === "price_asc") {
+      return group.rows.reduce((best, row) =>
+        row.cit < best.cit ? row : best,
+      );
+    }
+    if (currentSort === "savings_booking") {
+      return group.rows.reduce((best, row) =>
+        row.savingsBooking > best.savingsBooking ? row : best,
+      );
+    }
+    return group.rows.reduce((best, row) =>
+      row.savingsTrip > best.savingsTrip ? row : best,
+    );
+  }
+
+  function formatValue(value) {
+    return value ? value : "N/A";
+  }
+
   function render() {
-    const filtered = getSorted(getFiltered());
-    const total = filtered.length;
+    const filtered = getFiltered();
+    const grouped = groupByHotel(filtered);
+    const sortedGroups = grouped.sort((a, b) => {
+      const aRow = pickGroupRow(a);
+      const bRow = pickGroupRow(b);
+      if (currentSort === "savings_trip")
+        return bRow.savingsTrip - aRow.savingsTrip;
+      if (currentSort === "savings_booking")
+        return bRow.savingsBooking - aRow.savingsBooking;
+      if (currentSort === "price_asc") return aRow.cit - bRow.cit;
+      if (currentSort === "price_desc") return bRow.cit - aRow.cit;
+      return 0;
+    });
+
+    const total = sortedGroups.length;
     const pages = Math.ceil(total / PER_PAGE);
     if (currentPage > pages) currentPage = 1;
-    const slice = filtered.slice(
+    const slice = sortedGroups.slice(
       (currentPage - 1) * PER_PAGE,
       currentPage * PER_PAGE,
     );
@@ -622,22 +705,92 @@ async function init() {
     const tbody = document.getElementById("tableBody");
     tbody.innerHTML =
       slice.length === 0
-        ? '<tr><td colspan="8"><div class="no-results">No hotels match your filters.</div></td></tr>'
+        ? '<tr><td colspan="9"><div class="no-results">No hotels match your filters.</div></td></tr>'
         : slice
-            .map(
-              (d) => `
-          <tr>
-            <td class="hotel-name">${d.hotel}</td>
-            <td><span class="city-badge">${d.city}</span></td>
-            <td><span class="stars">${"★".repeat(d.stars)}</span></td>
-            <td><span class="price-cit">$${d.cit.toFixed(0)}</span></td>
-            <td><span class="price-other">$${d.trip.toFixed(0)}</span></td>
-            <td class="price-other-col"><span class="price-other">$${d.booking.toFixed(0)}</span></td>
-            <td><span class="savings-pill ${savingsClass(d.savingsTrip)}">${d.savingsTrip >= 0 ? "+" : ""}${d.savingsTrip.toFixed(1)}%</span></td>
-            <td><span class="savings-pill ${savingsClass(d.savingsBooking)}">${d.savingsBooking >= 0 ? "+" : ""}${d.savingsBooking.toFixed(1)}%</span></td>
-          </tr>`,
-            )
+            .map((group, groupIndex) => {
+              const row = pickGroupRow(group);
+              const groupId = `group-${currentPage}-${groupIndex}`;
+              const hasVariants = group.rows.length > 1;
+              const variantCount = group.rows.length;
+              const detailRows = group.rows
+                .map(
+                  (d) => `
+                  <tr>
+                    <td>${formatValue(d.roomType)}</td>
+                    <td>${formatValue(d.bedType)}</td>
+                    <td>${formatValue(d.freeCancellation)}</td>
+                    <td>${formatValue(d.breakfastIncluded)}</td>
+                    <td><span class="price-cit">$${d.cit.toFixed(0)}</span></td>
+                    <td><span class="price-other">$${d.trip.toFixed(0)}</span></td>
+                    <td><span class="price-other">$${d.booking.toFixed(0)}</span></td>
+                    <td><span class="savings-pill ${savingsClass(d.savingsTrip)}">${d.savingsTrip >= 0 ? "+" : ""}${d.savingsTrip.toFixed(1)}%</span></td>
+                    <td><span class="savings-pill ${savingsClass(d.savingsBooking)}">${d.savingsBooking >= 0 ? "+" : ""}${d.savingsBooking.toFixed(1)}%</span></td>
+                  </tr>`,
+                )
+                .join("");
+              return `
+          <tr class="group-row" data-group="${groupId}">
+            <td class="hotel-name">${row.hotel}</td>
+            <td><span class="city-badge">${row.city}</span></td>
+            <td><span class="stars">${"★".repeat(row.stars)}</span></td>
+            <td><span class="price-cit">$${row.cit.toFixed(0)}</span></td>
+            <td><span class="price-other">$${row.trip.toFixed(0)}</span></td>
+            <td class="price-other-col"><span class="price-other">$${row.booking.toFixed(0)}</span></td>
+            <td><span class="savings-pill ${savingsClass(row.savingsTrip)}">${row.savingsTrip >= 0 ? "+" : ""}${row.savingsTrip.toFixed(1)}%</span></td>
+            <td><span class="savings-pill ${savingsClass(row.savingsBooking)}">${row.savingsBooking >= 0 ? "+" : ""}${row.savingsBooking.toFixed(1)}%</span></td>
+            <td class="group-toggle-cell">
+              ${
+                hasVariants
+                  ? `<button class="group-toggle" data-target="${groupId}" data-count="${variantCount}" aria-expanded="false" aria-label="Show ${variantCount} options">${variantCount} ▾</button>`
+                  : ""
+              }
+            </td>
+          </tr>
+          ${
+            hasVariants
+              ? `
+          <tr class="group-details" data-group-details="${groupId}" style="display:none">
+            <td colspan="9">
+              <div class="variant-wrap">
+                <table class="variant-table">
+                  <thead>
+                    <tr>
+                      <th>Room Type</th>
+                      <th>Bed Type</th>
+                      <th>Free Cancellation</th>
+                      <th>Breakfast</th>
+                      <th>CIT</th>
+                      <th>Trip.com</th>
+                      <th>Booking.com</th>
+                      <th>Save vs Trip</th>
+                      <th>Save vs Booking</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${detailRows}
+                  </tbody>
+                </table>
+              </div>
+            </td>
+          </tr>`
+              : ""
+          }`;
+            })
             .join("");
+
+    tbody.querySelectorAll(".group-toggle").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.target;
+        const count = btn.dataset.count;
+        const details = tbody.querySelector(
+          `[data-group-details="${target}"]`,
+        );
+        const isOpen = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!isOpen));
+        btn.textContent = isOpen ? `${count} ▾` : `${count} ▴`;
+        if (details) details.style.display = isOpen ? "none" : "table-row";
+      });
+    });
 
     const pag = document.getElementById("pagination");
     pag.innerHTML = "";
@@ -677,9 +830,25 @@ async function init() {
     );
   }
 
+  filterCountry.addEventListener("change", () => {
+    populateCityOptions(filterCountry.value, "");
+    currentPage = 1;
+    render();
+  });
+
+  filterCity.addEventListener("change", () => {
+    if (filterCity.value) {
+      const match = DATA.find((d) => d.city === filterCity.value);
+      if (match) {
+        filterCountry.value = match.country;
+        populateCityOptions(match.country, filterCity.value);
+      }
+    }
+    currentPage = 1;
+    render();
+  });
+
   [
-    filterCountry,
-    filterCity,
     filterStars,
     filterStay,
     filterBedType,
