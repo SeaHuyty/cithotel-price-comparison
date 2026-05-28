@@ -16,7 +16,7 @@ Dhawa Yura Kyoto,5,Premier King - Outdoor View,1 Extra-Large Double Bed,Yes,Yes,
 Dhawa Yura Kyoto,5,Premier King - Outdoor View,2 Extra-Large Double Bed,Yes,No,2026-06-27,2026-06-28,Kyoto,Japan,Weekend,1,1,USD,178.50,291.00,248.00,38.66%,28.02%
 Eurostars Berlin,5,NULL,2 Single Bed,Yes,No,2026-06-16,2026-06-17,Berlin,Germany,Weekday,1,1,USD,141.57,277.00,291.00,48.89%,51.35%
 Radisson Collection Hotel,5,NULL,1 Double Bed,Yes,No,2026-06-16,2026-06-17,Berlin,Germany,Weekday,1,1,USD,204.00,280.00,280.00,27.14%,27.14%
-Roomers Berlin Steinplatz, Autograph Collection,5,NULL,2 Single Bed,Yes,No,2026-06-16,2026-06-17,Berlin,Germany,Weekday,1,1,USD,237.73,287.00,316.00,17.17%,24.77%
+Roomers Berlin Steinplatz - Autograph Collection,5,NULL,2 Single Bed,Yes,No,2026-06-16,2026-06-17,Berlin,Germany,Weekday,1,1,USD,237.73,287.00,316.00,17.17%,24.77%
 Berlin Marriott Hotel,5,NULL,1 Extra-Large Double Bed,Yes,No,2026-06-16,2026-06-17,Berlin,Germany,Weekday,1,1,USD,242.00,328.00,371.00,26.22%,34.77%
 Eurostars Suites Mirasierra,5,NULL,2 Single Beds or 1 Double Bed,No,No,2026-06-22,2026-06-23,Madrid,Spain,Weekday,1,1,USD,109.84,146.00,157.00,24.77%,30.04%
 Hotel Puerta America,5,NULL,2 Single Beds or 1 Double Bed,No,No,2026-06-22,2026-06-23,Madrid,Spain,Weekday,1,1,USD,132.32,185.00,166.00,28.48%,20.29%
@@ -46,7 +46,7 @@ Occidental Diagonal 414,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Barcelona,Sp
 Negresco Princess,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Barcelona,Spain,Weekday,1,1,USD,193.55,348.00,348.00,44.38%,44.38%
 Eurostars Barcelona Central,5,NULL,NULL,NULL,NULL,2026-06-27,2026-06-27,Barcelona,Spain,Weekday,1,1,USD,268.39,342.00,368.00,21.52%,27.07%
 Rafayel Hotel & Spa,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,209.00,287.00,274.00,27.18%,23.72%
-InterContinental Hotels London, The O2 by IHG,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,231.00,350.00,351.00,34.00%,34.19%
+InterContinental Hotels London - The O2 by IHG,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,231.00,350.00,351.00,34.00%,34.19%
 Limehouse Library Hotel,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,298.00,488.00,659.00,38.93%,54.78%
 Radisson Blu Hotel,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,383.00,439.00,439.00,12.76%,12.76%
 Hyatt Regency London Blackfriars,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,London,England,Weekday,1,1,USD,441.00,476.00,476.00,7.35%,7.35%
@@ -65,7 +65,7 @@ Grand Hyatt Residence,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Dubai,UAE,Week
 Grand Millennium Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,104.00,133.00,127.00,21.80%,18.11%
 JW Marriott Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,119.00,141.00,139.00,15.60%,14.39%
 The RuMa Hotel and Residence,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,159.00,174.00,168.00,8.62%,5.36%
-Hotel Stripes Kuala Lumpur, Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,81.00,98.00,81.00,17.35%,0.00%
+Hotel Stripes Kuala Lumpur - Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,81.00,98.00,81.00,17.35%,0.00%
 The St. Regis Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Kuala Lumpur,Malaysia,Weekday,1,1,USD,271.00,347.00,311.00,21.90%,12.86%
 Grand Prince Hotel Shin Takanawa,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Tokyo,Japan,Weekday,1,1,USD,147.00,183.00,209.00,19.67%,29.67%
 HILTON Tokyo Odaiba,5,NULL,NULL,NULL,NULL,2026-06-26,2026-06-27,Tokyo,Japan,Weekday,1,1,USD,183.00,315.00,316.00,41.90%,42.09%
@@ -98,9 +98,9 @@ The Myst Dong Khoi,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Ho Chi Minh,Vietn
 Four Seasons Hotel Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,326.30,373.76,413.00,12.70%,21.00%
 Sofitel Kuala Lumpur Damansara,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,114.55,130.78,130.07,12.42%,11.94%
 Hilton Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,111.60,132.67,132.86,15.88%,16.05%
-Hyatt House Kuala Lumpur, Mont Kiara,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,86.81,130.92,109.15,33.70%,20.43%
-Hotel Stripes Kuala Lumpur, Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,89.53,98.97,98.97,9.54%,9.54%
-The Majestic Hotel Kuala Lumpur, Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,106.31,121.20,121.32,12.28%,12.37%
+Hyatt House Kuala Lumpur - Mont Kiara,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,86.81,130.92,109.15,33.70%,20.43%
+Hotel Stripes Kuala Lumpur - Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,89.53,98.97,98.97,9.54%,9.54%
+The Majestic Hotel Kuala Lumpur - Autograph Collection,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,106.31,121.20,121.32,12.28%,12.37%
 Parkroyal Collection Kuala Lumpur,5,NULL,NULL,NULL,NULL,2026-06-05,2026-06-06,Kuala Lumpur,Malaysia,Weekday,1,1,USD,107.55,139.58,213.26,22.96%,49.57%
 Ambrosia Suites & Aparts,4,NULL,1 Extra-Large Double Bed or 2 Single Beds,Yes,Yes,2026-06-24,2026-06-25,Athens,Greece,Weekday,1,1,USD,73.45,83.00,89.00,11.51%,17.47%
 Casual Kubic Athens,4,NULL,1 Extra-Large Double Bed or 2 Single Beds,No,Yes,2026-06-24,2026-06-25,Athens,Greece,Weekday,1,1,USD,158.00,171.00,160.00,7.60%,1.25%
@@ -136,15 +136,15 @@ Cordis Beijing Capital Airport by Langham Group,5,Deluxe Lake View King,1 Extra-
 Glenview ITC Plaza Chongqing,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2026-07-11,2026-07-12,Chongqing,China,Weekend,1,1,USD,79.50,96.00,90.00,17.19%,11.67%
 Somerset Yangtze River Chongqing,4,Executive,2 Single Beds,No,Yes,2026-07-11,2026-07-12,Chongqing,China,Weekend,1,1,USD,56.50,71.00,71.00,20.42%,20.42%
 Ascott Raffles City Chongqing,4,Studio Deluxe,1 Large Double Bed,Yes,No,2026-07-11,2026-07-12,Chongqing,China,Weekend,1,1,USD,103.40,147.00,147.00,29.66%,29.66%
-Kempinski Hotel Shenzhen China,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,125.00,146.00,146.00,14.38%,14.38%
-The Langham Shenzhen,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,128.50,153.00,153.00,16.01%,16.01%
-Sheraton Shenzhen Futian Hotel,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,178.00,194.00,194.00,8.25%,8.25%
-Futian Shangri-La Shenzhen,5,Deluxe,2 Single Beds,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,166.50,189.00,189.00,11.90%,11.90%
-Hilton Garden Inn Shenzhen Bao'an,4,Twin,2 Single Beds,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,55.30,59.00,58.00,6.27%,4.66%
-Four Points by Sheraton Shenzhen,4,Superior,1 Extra-Large Double Bed,Yes,No,2025-07-13,2025-07-14,Berlin,Germany,Weekday,1,1,USD,95.50,103.00,104.00,7.28%,8.17%
-Paradise Boutique Hotel,3,Superior,2 Single Beds,Yes,Yes,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,18.00,26.00,27.00,30.77%,33.33%
-Holy Sheet Plus,4,Deluxe,2 Single Beds,Yes,Yes,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,58.00,59.00,66.00,1.69%,12.12%
-Novotel Cairo Airport,4,Standard,1 Extra-Large Double Bed,No,No,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,76.25,88.00,88.00,13.35%,13.35%
-Baron Hotel Cairo,4,Superior,1 Extra-Large Double Bed or 2 Single Beds,Yes,No,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,84.00,107.00,97.00,21.50%,13.40%
-Ramses Hilton,5,King Guest,1 Large Double Bed,Yes,No,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,133.00,134.00,134.00,0.75%,0.75%
-Al Masa Hotel Nasr City,5,Standard,1 Double Bed,No,No,2025-07-15,2025-07-16,Cairo,Egypt,Weekday,1,1,USD,97.50,125.00,115.00,22.00%,15.22%
+Kempinski Hotel Shenzhen China,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,125.00,146.00,146.00,14.38%,14.38%
+The Langham Shenzhen,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,128.50,153.00,153.00,16.01%,16.01%
+Sheraton Shenzhen Futian Hotel,5,Deluxe,1 Extra-Large Double Bed,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,178.00,194.00,194.00,8.25%,8.25%
+Futian Shangri-La Shenzhen,5,Deluxe,2 Single Beds,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,166.50,189.00,189.00,11.90%,11.90%
+Hilton Garden Inn Shenzhen Bao'an,4,Twin,2 Single Beds,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,55.30,59.00,58.00,6.27%,4.66%
+Four Points by Sheraton Shenzhen,4,Superior,1 Extra-Large Double Bed,Yes,No,2026-07-13,2026-07-14,Berlin,Germany,Weekday,1,1,USD,95.50,103.00,104.00,7.28%,8.17%
+Paradise Boutique Hotel,3,Superior,2 Single Beds,Yes,Yes,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,18.00,26.00,27.00,30.77%,33.33%
+Holy Sheet Plus,4,Deluxe,2 Single Beds,Yes,Yes,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,58.00,59.00,66.00,1.69%,12.12%
+Novotel Cairo Airport,4,Standard,1 Extra-Large Double Bed,No,No,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,76.25,88.00,88.00,13.35%,13.35%
+Baron Hotel Cairo,4,Superior,1 Extra-Large Double Bed or 2 Single Beds,Yes,No,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,84.00,107.00,97.00,21.50%,13.40%
+Ramses Hilton,5,King Guest,1 Large Double Bed,Yes,No,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,133.00,134.00,134.00,0.75%,0.75%
+Al Masa Hotel Nasr City,5,Standard,1 Double Bed,No,No,2026-07-15,2026-07-16,Cairo,Egypt,Weekday,1,1,USD,97.50,125.00,115.00,22.00%,15.22%

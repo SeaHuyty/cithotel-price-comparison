@@ -543,7 +543,7 @@ async function init() {
 
   populateCityOptions("");
 
-  ["2 Single Beds", "1 Double Bed", "1 Extra-Large Double Bed"].forEach(
+  ["2 Single Beds", "1 Double Bed", "1 Large Double Bed", "1 Extra-Large Double Bed"].forEach(
     (t) => {
       const o = document.createElement("option");
       o.value = t;
