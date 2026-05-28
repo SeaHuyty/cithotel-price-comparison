@@ -67,20 +67,15 @@ async function init() {
   let stayMode = "price";
 
   document.getElementById("heroStats").innerHTML = `
-    <div class="stat-card highlight">
-      <div class="stat-label">CIT Hotel avg price</div>
-      <div class="stat-value">$${avgCIT.toFixed(0)}</div>
-      <div class="stat-sub">per night · USD</div>
-    </div>
     <div class="stat-card">
-      <div class="stat-label">Trip.com avg price</div>
-      <div class="stat-value">$${avgTrip.toFixed(0)}</div>
-      <div class="stat-badge">You save ${avgSavTrip.toFixed(1)}%</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Booking.com avg price</div>
-      <div class="stat-value">$${avgBook.toFixed(0)}</div>
-      <div class="stat-badge">You save ${avgSavBook.toFixed(1)}%</div>
+      <div class="stat-label">Average Hotel Price</div>
+      <div class="stat-value">${avgSavTrip.toFixed(1)}%</div>
+      <div class="stat-badge">Cheaper than Trip.com</div>
+      </div>
+      <div class="stat-card">
+      <div class="stat-label">Average Hotel Price</div>
+      <div class="stat-value">${avgSavBook.toFixed(1)}%</div>
+      <div class="stat-badge">Cheaper than Booking.com</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Hotels compared</div>
