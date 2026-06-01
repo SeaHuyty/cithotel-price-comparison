@@ -66,6 +66,8 @@ async function init() {
   let cityMode = "price";
   let stayMode = "price";
 
+  const distinctHotels = new Set(DATA.map((d) => d.hotel)).size;
+
   document.getElementById("heroStats").innerHTML = `
     <div class="stat-card">
       <div class="stat-label">Average Hotel Price</div>
@@ -79,7 +81,7 @@ async function init() {
     </div>
     <div class="stat-card">
       <div class="stat-label">Hotels compared</div>
-      <div class="stat-value">${DATA.length}</div>
+      <div class="stat-value">${distinctHotels}</div>
       <div class="stat-sub">across ${[...new Set(DATA.map((d) => d.city))].length} cities</div>
     </div>
   `;
@@ -187,54 +189,57 @@ async function init() {
   );
 
   // ─── SAVINGS CHART
-  new Chart(document.getElementById("savingsChart").getContext("2d"), {
-    type: "bar",
-    data: {
-      labels: cities,
-      datasets: [
-        {
-          label: "vs Trip.com",
-          data: savTrip,
-          backgroundColor: "#e05c2a",
-          borderRadius: 3,
-        },
-        {
-          label: "vs Booking.com",
-          data: savBook,
-          backgroundColor: "#003580",
-          borderRadius: 3,
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: (ctx) => ` ${ctx.raw}% cheaper` },
-        },
+  const savingsCanvas = document.getElementById("savingsChart");
+  if (savingsCanvas) {
+    new Chart(savingsCanvas.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: cities,
+        datasets: [
+          {
+            label: "vs Trip.com",
+            data: savTrip,
+            backgroundColor: "#e05c2a",
+            borderRadius: 3,
+          },
+          {
+            label: "vs Booking.com",
+            data: savBook,
+            backgroundColor: "#003580",
+            borderRadius: 3,
+          },
+        ],
       },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: {
-            font: { family: "IBM Plex Sans", size: 11 },
-            color: "#7a7870",
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: { label: (ctx) => ` ${ctx.raw}% cheaper` },
           },
         },
-        y: {
-          grid: { color: "#eeece6" },
-          ticks: {
-            callback: (v) => v + "%",
-            font: { family: "IBM Plex Sans", size: 11 },
-            color: "#7a7870",
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: {
+              font: { family: "IBM Plex Sans", size: 11 },
+              color: "#7a7870",
+            },
           },
-          border: { display: false },
+          y: {
+            grid: { color: "#eeece6" },
+            ticks: {
+              callback: (v) => v + "%",
+              font: { family: "IBM Plex Sans", size: 11 },
+              color: "#7a7870",
+            },
+            border: { display: false },
+          },
         },
       },
-    },
-  });
+    });
+  }
 
   // ─── SAVINGS DISTRIBUTION
   const binLabels = ["<0%", "0-10%", "10-20%", "20-30%", "30-40%", "40-50%", "50%+"];
